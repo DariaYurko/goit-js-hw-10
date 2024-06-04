@@ -10,8 +10,9 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
+
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
+    console.log(selectedDates[0], 'тут варто обробляти вілідацію дати');
   },
 };
 
@@ -39,4 +40,15 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
+const inputEl = document.querySelector('#datetime-picker');
 let userSelectedDate;
+flatpickr(inputEl, options);
+
+/**============================================================= */
+
+let counter = 0
+const intervalId = setInterval(() => {
+
+}, 1000)
+
+convertMs()
