@@ -4,23 +4,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-
-
-
-// Parametrs
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-
-  onClose(selectedDates) {
-    console.log(selectedDates[0], 'тут варто обробляти вілідацію дати');
-  },
-};
-
-
-
+import iconClose from '../img/2-snackbar/x-octagon.svg';
 
 /**
  * Converts number of milliseconds to unit of time
@@ -46,23 +30,49 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
+// Parameters
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
 
+  onClose(selectedDates) {
+    if (selectedDates[0] < Date.now()) {
+      iziToast.show({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+        titleColor: '#ffffff',
+        titleSize: '16',
+        messageColor: '#ffffff',
+        class: 'resolved-promise',
+        backgroundColor: '#b51b1b',
+
+        iconUrl: iconClose,
+        position: 'topRight',
+        theme: 'dark',
+      });
+
+      buttonEl.disabled = true;
+    } else {
+      buttonEl.disabled = false;
+      userSelectedDate = selectedDates[0];
+    }
+  },
+};
 
 const inputEl = document.querySelector('#datetime-picker');
 const buttonEl = document.querySelector('[data-start]');
-
-let userSelectedDate = null;
+buttonEl.disabled = true;
+let userSelectedDate;
 
 flatpickr(inputEl, options);
 
 /**============================================================= */
 
-inputEl.addEventListener('input', (event) => {
-
-  userSelectedDate = event.target.value
-  console.log(userSelectedDate);
-
-})
+inputEl.addEventListener('input', event => {
+  userSelectedDate = event.target.value;
+});
 
 buttonEl.addEventListener('click', () => {
   const days = document.querySelector('[data-days]');
@@ -70,12 +80,22 @@ buttonEl.addEventListener('click', () => {
   const minutes = document.querySelector('[data-minutes]');
   const seconds = document.querySelector('[data-seconds]');
 
-  const currentTime = Date.now()
-  // console.log(currentTime);
+  buttonEl.disabled = true;
+  inputEl.disabled = true;
 
-  // const intervalId = setInterval(() => {
-  //   console.log(seconds.textContent);
-  // }, 1000)
+  setTimeout(() => {
+    clearInterval(intervalId);
+    inputEl.disabled = false;
+  }, userSelectedDate - Date.now());
 
-})
+  const intervalId = setInterval(() => {
+    const currentTime = Date.now();
+    const diff = userSelectedDate - currentTime;
+    const objTime = convertMs(diff);
 
+    days.textContent = objTime.days.toString().padStart(2, '0');
+    hours.textContent = objTime.hours.toString().padStart(2, '0');
+    minutes.textContent = objTime.minutes.toString().padStart(2, '0');
+    seconds.textContent = objTime.seconds.toString().padStart(2, '0');
+  }, 1000);
+});
