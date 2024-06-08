@@ -1,38 +1,71 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import iconOk from '../img/2-snackbar/check-circle.svg';
+import iconClose from '../img/2-snackbar/x-octagon.svg';
 
-const formEl = document.querySelector('.form')
+// Custom checkbox
+const inputRadioEls = document.querySelectorAll('[name="state"]');
 
-formEl.addEventListener('submit', (event) => {
-   event.preventDefault();
+inputRadioEls.forEach(el => {
+  const customCheckBox = document.createElement('span');
+  customCheckBox.classList.add('custom-checkbox');
 
-   const delay = Number(formEl.elements.delay.value);
-   const radioEl = formEl.elements.state.value
+  el.parentNode.insertBefore(customCheckBox, el.nextSibling);
+});
 
-   const thisIsPromis = new Promise((resolve, reject) => {
-      setTimeout(() => {
-         if (radioEl === 'fulfilled') {
-            resolve(`Fulfilled promise in ${delay}ms`);
-         } else if (radioEl === 'rejected') {
-           reject(`Rejected promise in ${delay}ms`);
-         }
-      }, delay)
-   })
+// -------------------------------------------------------
+const formEl = document.querySelector('.form');
 
-   thisIsPromis
-     .then(value => {
-       // Promise fulfilled
-       console.log(value);
-     })
-     .catch(error => {
-       // Promise rejected
-       console.log(error);
-     });
+formEl.addEventListener('submit', event => {
+  event.preventDefault();
 
-   // console.log(delay);
-   // console.log(radioEl);
-   // console.log(thisIsPromis);
-   
-})
+  const delay = Number(formEl.elements.delay.value);
+  const radioEl = formEl.elements.state.value;
 
+  const thisIsPromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (radioEl === 'fulfilled') {
+        resolve(`Fulfilled promise in ${delay}ms`);
+      } else if (radioEl === 'rejected') {
+        reject(`Rejected promise in ${delay}ms`);
+      }
+    }, delay);
+  });
 
+  thisIsPromise
+    .then(value => {
+      // Promise fulfilled
+      iziToast.success({
+        title: 'OK',
+        message: value,
+
+        titleColor: '#ffffff',
+        titleSize: '16',
+        messageColor: '#ffffff',
+        class: 'resolved-promise',
+        backgroundColor: '#59a10d',
+        iconUrl: iconOk,
+        position: 'topRight',
+        theme: 'dark',
+      });
+    })
+    .catch(error => {
+      // Promise rejected
+      iziToast.error({
+        title: 'Error',
+        message: error,
+        titleColor: '#ffffff',
+        titleSize: '16',
+        messageColor: '#ffffff',
+        class: 'resolved-promise',
+        backgroundColor: '#b51b1b',
+
+        iconUrl: iconClose,
+        position: 'topRight',
+        theme: 'dark',
+      });
+    });
+
+    formEl.reset();
+});
+// -------------------------------------------------------

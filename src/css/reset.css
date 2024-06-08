@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
 /* Reset styles */
 *,
 *::before,
@@ -43,6 +44,7 @@ button {
   color: inherit;
 }
 
+
 img {
   display: block;
   max-width: 100%;
@@ -67,13 +69,6 @@ body {
   background: #fff;
 }
 
-.container {
-  max-width: 1158px;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin: 0 auto;
-}
-
 button {
   border-radius: 8px;
   padding: 8px 16px;
@@ -90,7 +85,7 @@ button:hover {
 }
 
 input {
-  min-width: 272px;
+  /* min-width: 272px; */
   padding: 8px 16px;
   border-radius: 4px;
   border: 1px solid #808080;

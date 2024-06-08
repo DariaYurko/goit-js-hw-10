@@ -4,6 +4,9 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+
+
+
 // Parametrs
 const options = {
   enableTime: true,
@@ -15,6 +18,9 @@ const options = {
     console.log(selectedDates[0], 'тут варто обробляти вілідацію дати');
   },
 };
+
+
+
 
 /**
  * Converts number of milliseconds to unit of time
@@ -40,15 +46,36 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
+
+
 const inputEl = document.querySelector('#datetime-picker');
-let userSelectedDate;
+const buttonEl = document.querySelector('[data-start]');
+
+let userSelectedDate = null;
+
 flatpickr(inputEl, options);
 
 /**============================================================= */
 
-let counter = 0
-const intervalId = setInterval(() => {
+inputEl.addEventListener('input', (event) => {
 
-}, 1000)
+  userSelectedDate = event.target.value
+  console.log(userSelectedDate);
 
-convertMs()
+})
+
+buttonEl.addEventListener('click', () => {
+  const days = document.querySelector('[data-days]');
+  const hours = document.querySelector('[data-hours]');
+  const minutes = document.querySelector('[data-minutes]');
+  const seconds = document.querySelector('[data-seconds]');
+
+  const currentTime = Date.now()
+  // console.log(currentTime);
+
+  // const intervalId = setInterval(() => {
+  //   console.log(seconds.textContent);
+  // }, 1000)
+
+})
+
